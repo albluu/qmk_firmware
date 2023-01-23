@@ -18,43 +18,37 @@
 // Defines the keycodes used by our macros in process_record_user
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT( /* Base, Function Button */
-      KC_ESC, MO(6), KC_ENTER, \
-      KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, \
-      KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, \
+  [0] = LAYOUT( /* Base, SDVX/DJMAX */
+      KC_ESC, MO(14), KC_ENTER, \
+      KC_S, KC_D, KC_F, KC_J, KC_K, KC_L, \
+      KC_PGUP, KC_F2, KC_C, KC_N, KC_TAB, KC_PGDOWN, \
       KC_LEFT, KC_RIGHT, KC_UP, KC_DOWN \
   ),
-  [1] = LAYOUT( /* Extra Buttons */
-      KC_ESC, KC_TRNS, KC_ENTER, \
-      KC_F13, KC_F14, KC_F15, KC_INS, KC_HOME, KC_PGUP, \
-      KC_PSCR, KC_PAUS, KC_SLCK, KC_DEL, KC_END, KC_PGDN, \
-      KC_LEFT, KC_RIGHT, KC_UP, KC_DOWN \
-  ),
-  [2] = LAYOUT( /* Osu mode */
-      KC_ESC, KC_TRNS,  KC_ENTER, \
+  [1] = LAYOUT( /* Osu!Standard/Mania */
+      KC_TRNS, KC_TRNS, KC_TRNS, \
       KC_S, KC_D, KC_F, KC_J, KC_K, KC_L, \
       KC_R, KC_F2, KC_SPACE, KC_SPACE, KC_DOT, KC_SLASH, \
       KC_LEFT, KC_RIGHT, KC_UP, KC_DOWN \
   ),
-  [3] = LAYOUT( /* KSM/8k mode */
-      KC_ESC, KC_TRNS, KC_ENTER, \
-      KC_S, KC_D, KC_F, KC_J, KC_K, KC_L, \
-      KC_PGUP, KC_F2, KC_C, KC_N, KC_TAB, KC_PGDOWN, \
-      KC_Q, KC_W, KC_O, KC_P \
+  [2] = LAYOUT( /* Function Keys */
+      KC_TRNS, KC_TRNS, KC_TRNS, \
+      KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, \
+      KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, \
+      KC_LEFT, KC_RIGHT, KC_UP, KC_DOWN \
   ),
-  [4] = LAYOUT( /* Programmer mode */
-      KC_ESC, KC_TRNS, KC_ENTER, \
+  [3] = LAYOUT( /* Programmer Mode */
+      KC_TRNS, KC_TRNS, KC_TRNS, \
       KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, \
       KC_INS, KC_DEL, KC_HOME, KC_END, KC_PGUP, KC_PGDOWN, \
       KC_LEFT, KC_RIGHT, KC_UP, KC_DOWN \
   ),
-  [6] = LAYOUT( /* Layer Switching and audio control*/
+  [14] = LAYOUT( /* Mode Switch */
       KC_NO, KC_TRNS,  KC_NO, \
-      TO(0), TO(1), TO(2), TO(3), TO(4), KC_NO, \
-      MO(7), KC_MUTE, KC_MPLY, KC_MSTP, KC_MPRV, KC_MNXT, \
+      TO(0), TO(1), TO(2), TO(3), KC_NO, KC_NO, \
+      MO(15), KC_MUTE, KC_MPLY, KC_MSTP, KC_MPRV, KC_MNXT, \
       KC_NO, KC_NO, KC_VOLD, KC_VOLU \
   ),
-  [7] = LAYOUT( /* Reset Layer */
+  [15] = LAYOUT( /* Reset Layer */
       KC_NO, KC_TRNS,  KC_NO, \
       KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, \
       KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, RESET, \
@@ -66,7 +60,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-void encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise) {
   uint8_t layer = biton32(layer_state);
   if (index == 0) { /* First encoder */
     if (clockwise) {
@@ -81,16 +75,5 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       tap_code(keymap_key_to_keycode(layer, (keypos_t) {.row = 3, .col = 4}));
     }
   }
-}
-
-void matrix_init_user(void) {
-
-}
-
-void matrix_scan_user(void) {
-
-}
-
-void led_set_user(uint8_t usb_led) {
-
+  return false;
 }
