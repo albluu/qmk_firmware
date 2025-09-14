@@ -21,7 +21,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT( /* Base, SDVX/DJMAX */
       KC_ESC, MO(14), KC_ENTER, \
       KC_S, KC_D, KC_F, KC_J, KC_K, KC_L, \
-      KC_PGUP, KC_F2, KC_C, KC_N, KC_TAB, KC_PGDOWN, \
+      KC_PGUP, KC_F2, KC_C, KC_N, KC_TAB, KC_PGDN, \
       KC_LEFT, KC_RIGHT, KC_UP, KC_DOWN \
   ),
   [1] = LAYOUT( /* Osu!Standard/Mania */
@@ -39,7 +39,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [3] = LAYOUT( /* Programmer Mode */
       KC_TRNS, KC_TRNS, KC_TRNS, \
       KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, \
-      KC_INS, KC_DEL, KC_HOME, KC_END, KC_PGUP, KC_PGDOWN, \
+      KC_INS, KC_DEL, KC_HOME, KC_END, KC_PGUP, KC_PGDN, \
       KC_LEFT, KC_RIGHT, KC_UP, KC_DOWN \
   ),
   [14] = LAYOUT( /* Mode Switch */
@@ -51,29 +51,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [15] = LAYOUT( /* Reset Layer */
       KC_NO, KC_TRNS,  KC_NO, \
       KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, \
-      KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, RESET, \
+      KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, QK_BOOT, \
       KC_NO, KC_NO, KC_NO, KC_NO \
   )
 };
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  return true;
-}
-
-bool encoder_update_user(uint8_t index, bool clockwise) {
-  uint8_t layer = biton32(layer_state);
-  if (index == 0) { /* First encoder */
-    if (clockwise) {
-      tap_code(keymap_key_to_keycode(layer, (keypos_t) {.row = 3, .col = 1}));
-    } else {
-      tap_code(keymap_key_to_keycode(layer, (keypos_t) {.row = 3, .col = 0}));
-    }
-  } else if (index == 1) { /* Second encoder */  
-    if (clockwise) {
-      tap_code(keymap_key_to_keycode(layer, (keypos_t) {.row = 3, .col = 5}));
-    } else {
-      tap_code(keymap_key_to_keycode(layer, (keypos_t) {.row = 3, .col = 4}));
-    }
-  }
-  return false;
-}
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [0] = { ENCODER_CCW_CW(MS_LEFT, MS_RGHT), ENCODER_CCW_CW(MS_DOWN, MS_UP) },
+    [1] = { ENCODER_CCW_CW(KC_LEFT, KC_RIGHT), ENCODER_CCW_CW(KC_UP, KC_DOWN) },
+    [2] = { ENCODER_CCW_CW(KC_LEFT, KC_RIGHT), ENCODER_CCW_CW(KC_UP, KC_DOWN) },
+    [3] = { ENCODER_CCW_CW(KC_LEFT, KC_RIGHT), ENCODER_CCW_CW(KC_UP, KC_DOWN) },
+    [14] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [15] = { ENCODER_CCW_CW(KC_NO, KC_NO), ENCODER_CCW_CW(KC_NO, KC_NO) }
+};
+#endif // ENCODER_MAP_ENABLE
